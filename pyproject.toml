@@ -1,0 +1,31 @@
+[project]
+name = "frame-representation-hypothesis"
+version = "0.1.0"
+description = "The Frame Representation Hypothesis is a robust framework for understanding and controlling LLMs."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "accelerate>=0.34.2",
+    "bitsandbytes>=0.43.3",
+    "cudf-cu12>=24.8.2",
+    "datasets>=3.0.0",
+    "huggingface-hub[all,cli,hf-transfer]>=0.24.7",
+    "humanize>=4.10.0",
+    "ipykernel>=6.29.5",
+    "ipywidgets>=8.1.5",
+    "loguru>=0.7.2",
+    "methodtools>=0.4.7",
+    "nltk>=3.9.1",
+    "numba>=0.60.0",
+    "numpy<2.1",
+    "pandas>=2.2.2",
+    "pre-commit>=3.8.0",
+    "pycountry>=24.6.1",
+    "pydantic>=2.9.1",
+    "pyyaml>=6.0.2",
+    "seaborn>=0.13.2",
+    "setuptools>=75.3.0",
+    "torch>=2.4.1",
+    "tqdm>=4.66.5",
+    "transformers>=4.44.2",
+]

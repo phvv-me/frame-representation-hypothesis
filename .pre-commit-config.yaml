@@ -1,0 +1,80 @@
+---
+minimum_pre_commit_version: 2.9.0
+repos:
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v4.6.0
+  hooks:
+  - id: check-yaml
+    exclude: tasks/
+  - id: check-ast
+  - id: check-toml
+  - id: check-case-conflict
+  - id: check-docstring-first
+  - id: check-symlinks
+  - id: check-vcs-permalinks
+  - id: debug-statements
+  - id: detect-private-key
+  - id: trailing-whitespace
+  - id: fix-byte-order-marker
+  - id: mixed-line-ending
+    args:
+    - --fix=lf
+  - id: name-tests-test
+    args:
+    - --pytest-test-first
+  - id: sort-simple-yaml
+- repo: https://github.com/jumanjihouse/pre-commit-hook-yamlfmt
+  rev: 0.2.3
+  hooks:
+  - id: yamlfmt
+    args: [--mapping, '2',
+      --sequence, '2', --offset,
+      '0', --width, '25']
+    exclude: robo.yml
+
+- repo: https://github.com/psf/black
+  rev: 24.8.0
+  hooks:
+  - id: black
+    args:
+    - --line-length=88
+    - --target-version=py310
+    - --preview
+  - id: black-jupyter
+    args:
+    - --line-length=88
+    - --target-version=py310
+    - --preview
+
+- repo: https://github.com/charliermarsh/ruff-pre-commit
+  rev: v0.6.8
+  hooks:
+  - id: ruff
+    args:
+    - --fix
+    - --line-length=88
+    - --target-version=py310
+    - --select=E,F,I
+    - --per-file-ignores=__init__.py:F401
+    - --ignore=E501
+    - --exclude=playground
+
+- repo: https://github.com/nbQA-dev/nbQA
+  rev: 1.8.7
+  hooks:
+  - id: nbqa-ruff
+    args:
+    - --fix
+    - --line-length=88
+    - --target-version=py310
+    - --select=E,F,I
+    - --ignore=E501,E402
+    additional_dependencies: [
+      ruff==0.3.4]
+- repo: https://github.com/jendrikseipp/vulture
+  rev: v2.13
+  hooks:
+  - id: vulture
+    args: [., --exclude, .venv/,
+      --make-whitelist, --min-confidence,
+      '80', --sort-by-size]

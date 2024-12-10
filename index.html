@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="The Frame Representation Hypothesis is a robust framework for understanding and controlling LLMs.">
+  <meta name="keywords" content="Frames, Linear Representation Hypothesis, Stiefel Manifold">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Frame Representation Hypothesis: Multi-Token LLM Interpretability and Concept-Guided Text Generation</title>
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro">
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/favicon.svg">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+</head>
+<body>
+
+<nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+  <div class="navbar-menu">
+    <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
+      <a class="navbar-item" href="https://phvv.me">
+      <span class="icon">
+          <i class="fas fa-home"></i>
+      </span>
+      </a>
+
+      <!-- <div class="navbar-item has-dropdown is-hoverable">
+        <a class="navbar-link">
+          More Research
+        </a>
+        <div class="navbar-dropdown">
+          <a class="navbar-item" href="https://hypernerf.github.io">
+            HyperNeRF
+          </a>
+          <a class="navbar-item" href="https://nerfies.github.io">
+            Nerfies
+          </a>
+          <a class="navbar-item" href="https://latentfusion.github.io">
+            LatentFusion
+          </a>
+          <a class="navbar-item" href="https://photoshape.github.io">
+            PhotoShape
+          </a>
+        </div> -->
+      </div>
+    </div>
+
+  </div>
+</nav>
+
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">Frame Representation Hypothesis</h1>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="https://phvv.me">Pedro Valois</a><sup>1</sup>,</span>
+            <span class="author-block">
+              <a href="https://dblp.org/pid/196/6193.html">Lincon Souza</a><sup>2</sup>,</span>
+            <span class="author-block">
+              <a href="https://ericashimomoto.github.io">Erica Kido Shimomoto</a><sup>2</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://www.cs.tsukuba.ac.jp/~kfukui/english/indexE.html">Kazuhiro Fukui</a><sup>1</sup>,
+            </span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><sup>1</sup>University of Tsukuba,</span>
+            <span class="author-block"><sup>2</sup>AIST</span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF Link. -->
+              <!-- <span class="link-block">
+                <a href="https://arxiv.org/pdf/0"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span> -->
+              <span class="link-block">
+                <a href="https://arxiv.org/pdf/0"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <!-- Video Link. -->
+              <!-- <span class="link-block">
+                <a href="https://www.youtube.com/watch?v=MrKrnHhk8IA"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-youtube"></i>
+                  </span>
+                  <span>Video</span>
+                </a>
+              </span> -->
+              <!-- Code Link. -->
+              <span class="link-block">
+                <a href="https://github.com/phvv-me/frame-representation-hypothesis.git"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                  </a>
+              </span>
+              <!-- Dataset Link. -->
+              <!-- <span class="link-block">
+                <a href="https://github.com/google/nerfies/releases/tag/0.1"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="far fa-images"></i>
+                  </span>
+                  <span>Data</span>
+                </a> -->
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <div style="display: flex; justify-content: center;">
+        <img src="./images/overview.jpg" width="500px" alt="Framework Diagram."/>
+      </div>
+      <h2 class="subtitle has-text-centered" style="margin-top: 5px;">
+        <strong>Frame Representation Hypothesis</strong>: Tokens are vectors, 
+        which combine into words as multi-dimensional frames. 
+        In turn, Concept Frames are centroids of word sets.
+      </h2>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            The Frame Representation Hypothesis is a robust framework for understanding and controlling LLMs. 
+          </p>
+          <p>
+            Interpretability is a key challenge in fostering trust for Large Language Models (LLMs), 
+            which stems from the complexity of extracting reasoning from model's parameters. 
+            Our framework is grounded in the Linear Representation Hypothesis (LRH) to interpret and control LLMs 
+            by modeling multi-token words. 
+          </p>
+          <p>
+            We use the Open Multilingual WordNet to generate concepts that can both 
+            guide the model text generation and expose biases or vulnerabilities.
+          </p>
+          <p>
+            To this end, we propose words can be interpreted as frames, 
+            ordered sequences of vectors that better capture token-word relationships. 
+            Then, concepts can be represented as the average of word frames sharing a common concept. 
+            We showcase these tools through <strong>Guided Decoding</strong>, which can intuitively steer text 
+            generation using concepts of choice.
+          </p>
+          <p>
+            We verify said ideas on Llama 3.1, Gemma 2, and Phi 3 families, demonstrating gender and language biases, 
+            exposing harmful content, but also potential to remediate them, leading to safer and more transparent LLMs.
+          </p>
+        </div>
+      </div>
+    </div>
+    <!--/ Abstract. -->
+  </div>
+</section>
+
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>@article{frame2025,
+      title={Frame Representation Hypothesis: Multi-Token LLM Interpretability and Concept-Guided Text Generation},
+      author={Valois, Pedro H. V. and Souza, Lincon and Shimamoto, Erica and Fukui, Kazuhiro},
+      journal={TACL},
+      year={2025}
+    }</code></pre>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            Please reach out to <a href="mailto:pedro@cvlab.cs.tsukuba.ac.jp">Pedro</a> for inquires.
+          </p>
+          <p>
+            This page was was adopted from the <a href="https://github.com/nerfies/nerfies.github.io">Nerfies</a> project page.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

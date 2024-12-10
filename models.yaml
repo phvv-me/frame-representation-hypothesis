@@ -1,0 +1,90 @@
+---
+# Llama 3.1:
+# - id: hugging-quants/Meta-Llama-3.1-405B-BNB-NF4
+#   family: Llama 3.1
+# - id: hugging-quants/Meta-Llama-3.1-405B-Instruct-AWQ-INT4
+#   family: Llama 3.1
+- id: hugging-quants/Meta-Llama-3.1-70B-BNB-NF4-BF16
+  family: Llama 3.1
+- id: hugging-quants/Meta-Llama-3.1-70B-Instruct-AWQ-INT4
+  family: Llama 3.1
+- id: hugging-quants/Meta-Llama-3.1-8B-Instruct-AWQ-INT4
+  family: Llama 3.1
+- id: meta-llama/Meta-Llama-3.1-8B
+  family: Llama 3.1
+
+# Gemma 2:
+- id: google/gemma-2-27b
+  family: Gemma 2
+  quantization: 4
+- id: google/gemma-2-27b-it
+  family: Gemma 2
+- id: google/gemma-2-9b
+  family: Gemma 2
+  quantization: 4
+- id: google/gemma-2-9b-it
+  family: Gemma 2
+
+# Gemma:
+# - id: google/gemma-2b
+#   family: Gemma
+# - id: google/gemma-7b
+#   family: Gemma
+# - id: google/gemma-7b-it
+#   family: Gemma
+# - id: google/gemma-2b-it
+#   family: Gemma
+
+# Phi 3:
+# - id: microsoft/Phi-3-medium-4k-instruct
+#   family: Phi 3
+- id: microsoft/Phi-3-medium-128k-instruct
+  family: Phi 3
+# - id: microsoft/Phi-3-small-8k-instruct
+#   family: Phi 3
+- id: microsoft/Phi-3-small-128k-instruct
+  family: Phi 3
+# - id: microsoft/Phi-3-mini-4k-instruct
+#   family: Phi 3
+- id: microsoft/Phi-3-mini-128k-instruct
+  family: Phi 3
+
+# Qwen 2:
+# - id: Qwen/Qwen2-72B
+#   family: Qwen 2
+#   quantization: 4
+# - id: Qwen/Qwen2-72B-Instruct
+#   family: Qwen 2
+#   quantization: 4
+# - id: Qwen/Qwen2-57B-A14B
+#   family: Qwen 2
+#   quantization: 8
+# - id: Qwen/Qwen2-57B-A14B-Instruct
+#   family: Qwen 2
+#   quantization: 8
+# - id: Qwen/Qwen2-7B
+#   family: Qwen 2
+# - id: Qwen/Qwen2-7B-Instruct
+#   family: Qwen 2
+# - id: Qwen/Qwen2-1.5B
+#   family: Qwen 2
+# - id: Qwen/Qwen2-1.5B-Instruct
+#   family: Qwen 2
+# - id: Qwen/Qwen2-0.5B
+#   family: Qwen 2
+# - id: Qwen/Qwen2-0.5B-Instruct
+#   family: Qwen 2
+
+# Qwen 2 Math:
+# - id: Qwen/Qwen2-Math-72B
+#   family: Qwen 2 Math
+# - id: Qwen/Qwen2-Math-72B-Instruct
+#   family: Qwen 2 Math
+# - id: Qwen/Qwen2-Math-7B
+#   family: Qwen 2 Math
+# - id: Qwen/Qwen2-Math-7B-Instruct
+#   family: Qwen 2 Math
+# - id: Qwen/Qwen2-Math-1.5B
+#   family: Qwen 2 Math
+# - id: Qwen/Qwen2-Math-1.5B-Instruct
+#   family: Qwen 2 Math
