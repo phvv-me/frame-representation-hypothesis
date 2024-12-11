@@ -56,11 +56,14 @@ If you have any questions, please feel free to submit an issue or contact `pedro
 If our work is useful for you, please cite as:
 
 ```
-@article{frame2025,
-  title={Frame Representation Hypothesis: Multi-Token LLM Interpretability and Concept-Guided Text Generation},
-  author={Valois, Pedro H. V. and Souza, Lincon and Shimamoto, Erica and Fukui, Kazuhiro},
-  journal={TACL},
-  year={2025}
+@misc{valois2024framerepresentationhypothesismultitoken,
+      title={Frame Representation Hypothesis: Multi-Token LLM Interpretability and Concept-Guided Text Generation}, 
+      author={Pedro H. V. Valois and Lincon S. Souza and Erica K. Shimomoto and Kazuhiro Fukui},
+      year={2024},
+      eprint={2412.07334},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2412.07334}, 
 }
 ```
 
