@@ -157,15 +157,59 @@
         <img src="./images/overview.jpg" width="500px" alt="Framework Diagram."/>
       </div>
       <h2 class="subtitle has-text-centered" style="margin-top: 5px;">
-        <strong>Frame Representation Hypothesis</strong>: Tokens are vectors, 
-        which combine into words as multi-dimensional frames. 
-        In turn, Concept Frames are centroids of word sets.
+        Tokens are vectors, words multi-dimensional frames, Concept Frames are word set centroids.
       </h2>
     </div>
   </div>
 </section>
 
-<section class="section">
+<section class="hero is-light is-small">
+  <p style="display: flex; justify-content: center; color: red; font-size: larger;">
+    <strong>CAUTION</strong>: There are examples containing sensitive material that may be distressing for some audiences.
+  </p>
+  <div class="hero-body">
+    <div class="container">
+      <div id="results-carousel" class="carousel results-carousel">
+        <div class="item item-steve">
+          <img src="./images/example-men.png" alt="Concept Guidance Example for 'Men'"/>
+        </div>
+        <div class="item item-chair-tp">
+          <img src="./images/example-women.png" alt="Concept Guidance Example for 'Women'"/>
+        </div>
+        <div class="item item-shiba">
+          <img src="./images/example-children.png" width="500px" alt="Concept Guidance Example for 'Children'"/>
+        </div>
+        <div class="item item-fullbody">
+          <img src="./images/example-women-2.png" width="500px" alt="2nd Concept Guidance Example for 'Women'"/>
+        </div>
+        <div class="item item-blueshirt">
+          <img src="./images/example-unsafe-1.png" width="500px" alt="1st Usafe Concept Guidance Example"/>
+        </div>
+        <div class="item item-blueshirt">
+          <img src="./images/example-unsafe-2.png" width="500px" alt="2nd Usafe Concept Guidance Example"/>
+        </div>
+        <div class="item item-blueshirt">
+          <img src="./images/example-unsafe-3.png" width="500px" alt="3rd Usafe Concept Guidance Example"/>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero teaser is-small">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <div style="display: flex; justify-content: center;">
+        <img src="./images/guidance.png" width="500px" alt="Framework Diagram."/>
+      </div>
+      <h2 class="subtitle has-text-centered" style="margin-top: 5px;">
+        Top-k tokens derived from LLM and one maximizing correlation with target Concept Frame is chosen.
+      </h2>
+    </div>
+  </div>
+</section>
+
+<section class="hero is-light is-small" style="padding: 20px 0;">
   <div class="container is-max-desktop">
     <!-- Abstract. -->
     <div class="columns is-centered has-text-centered">
@@ -205,7 +249,7 @@
 
 <section class="section" id="BibTeX">
   <div class="container is-max-desktop content">
-    <h2 class="title">BibTeX</h2>
+    <h2 class="title">BibTeX Citation</h2>
     <pre><code>@misc{valois2024framerepresentationhypothesismultitoken,
       title={Frame Representation Hypothesis: Multi-Token LLM Interpretability and Concept-Guided Text Generation}, 
       author={Pedro H. V. Valois and Lincon S. Souza and Erica K. Shimomoto and Kazuhiro Fukui},
