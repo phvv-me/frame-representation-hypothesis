@@ -1,0 +1,8 @@
+datasets/
+logs/
+files/
+outputs/
+**/__pycache__/
+images/
+static/
+.venv/

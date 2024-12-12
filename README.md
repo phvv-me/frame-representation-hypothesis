@@ -37,7 +37,19 @@ pip install uv
 uv sync
 ```
 
-3. Download Models
+- We also provide a Docker image (you may need to update the CUDA version to yours)
+
+3. Add Environment Variables
+
+- Create a `.env` file following the `.env.example` file.
+- You will need a Hugging Face Acces Token to Download models. Here is how to obtain it: https://huggingface.co/docs/hub/en/security-tokens
+- You will also need to ask for permission to download each model in `models.yaml`: https://huggingface.co/docs/hub/en/models-gated
+      - hugging-quants/Meta-Llama-3.1-8B-Instruct-AWQ-INT4
+      - meta-llama/Meta-Llama-3.1-8B
+      - ...
+
+
+4. Download Models
 
 Run `01_START_HERE.ipynb` to download all models.
 
