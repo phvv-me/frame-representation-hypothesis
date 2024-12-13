@@ -1,34 +1,36 @@
-# Use NVIDIA CUDA base image
-FROM nvidia/cuda:12.3.1-runtime-ubuntu22.04
+# Use NVIDIA NGC PyTorch image
+FROM nvcr.io/nvidia/pytorch:24.11-py3
 
 # Set environment variables
-ENV PYTHONUNBUFFERED=1 \
-    PYTHONDONTWRITEBYTECODE=1 \
-    PIP_NO_CACHE_DIR=1
-
-# Install dependencies and add deadsnakes PPA
-RUN apt-get update && apt-get install -y \
-    software-properties-common \
-    && add-apt-repository ppa:deadsnakes/ppa \
-    && apt-get update \
-    && apt-get install -y \
-    python3.11 \
-    python3.11-dev \
-    python3.11-venv \
-    python3.11-distutils \
-    && rm -rf /var/lib/apt/lists/*
-
-# Make python3.11 the default python and install pip
-RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.11 1 && \
-    curl -sS https://bootstrap.pypa.io/get-pip.py | python3.11
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV OPENCV_LOG_LEVEL=ERROR
+ENV OPENCV_VIDEOIO_DEBUG=0
+ENV TZ="Asia/Tokyo"
 
 # Copy dependency files
 WORKDIR /app
 COPY pyproject.toml .
 
-# Install dependencies using pip
-RUN pip3 install pip --upgrade && \
-    pip3 install .
+# Install additional dependencies
+RUN pip install -U "accelerate>=0.34.2" \
+    "bitsandbytes>=0.43.3" \
+    "datasets>=3.0.0" \
+    "huggingface-hub[all,cli,hf-transfer]>=0.24.7" \
+    "humanize>=4.10.0" \
+    "ipykernel>=6.29.5" \
+    "ipywidgets>=8.1.5" \
+    "loguru>=0.7.2" \
+    "methodtools>=0.4.7" \
+    "nltk>=3.9.1" \
+    "pycountry>=24.6.1" \
+    "pydantic>=2.9.1" \
+    "python-dotenv>=1.0.1" \
+    "pyyaml>=6.0.2" \
+    "seaborn>=0.13.2" \
+    "setuptools>=75.3.0" \
+    "tqdm>=4.66.5" \
+    "transformers>=4.44.2"
 
 # Set default command
 CMD ["python3"]
