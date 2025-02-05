@@ -289,3 +289,7 @@ class BaseHuggingFaceModel(BaseModel, ABC, arbitrary_types_allowed=True):
     ) -> torch.Tensor:
         hs = self.forward_last_hiden_state(inputs_embeds=inputs_embeds)
         return hs.matmul(probes)[..., -1, :]
+    
+    @abstractmethod
+    def generate(self, text, *args, **kwargs) -> Any:
+        raise NotImplementedError

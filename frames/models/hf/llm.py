@@ -13,6 +13,10 @@ from transformers import (
 from ...utils.stdlib import is_online
 from .base import BaseHuggingFaceModel
 
+from typing import TypeAlias
+
+MessageList: TypeAlias = list[dict[Literal["text"], str]]
+
 
 class LanguageHuggingFaceModel(BaseHuggingFaceModel):
     tkn: Type[PreTrainedTokenizer] = AutoTokenizer
@@ -41,7 +45,7 @@ class LanguageHuggingFaceModel(BaseHuggingFaceModel):
     def _fix_pad_token_in_mistral_model(self):
         self._fix_token(self._tokenizer.eos_token, "pad")
 
-    def _build_simple_messages(self, inputs: list[dict[Literal["text"], str]]):
+    def _build_simple_messages(self, inputs: MessageList):
         return [
             [
                 {
@@ -54,7 +58,7 @@ class LanguageHuggingFaceModel(BaseHuggingFaceModel):
 
     def make_input(
         self,
-        inputs: list[dict[Literal["text"], str]] | torch.IntTensor,
+        inputs: MessageList | torch.IntTensor,
         *args,
         **kwargs,
     ) -> torch.Tensor:
@@ -69,8 +73,8 @@ class LanguageHuggingFaceModel(BaseHuggingFaceModel):
         ).to(self.device)
 
     def _decode_if_tensor(
-        self, inputs: list[dict[Literal["text"], str]] | torch.IntTensor
-    ) -> list[dict[Literal["text"], str]]:
+        self, inputs: MessageList | torch.IntTensor
+    ) -> MessageList:
         return (
             self.decode(inputs.flatten(0, 1))
             if isinstance(inputs, torch.Tensor)
@@ -94,6 +98,9 @@ class LanguageHuggingFaceModel(BaseHuggingFaceModel):
 
     def embed(self, input_text: str) -> torch.Tensor:
         return self.get_embeddings(self.tokenize(input_text))
+    
+    def generate(self, inputs: MessageList, *args, **kwargs):
+        return self.model.generate(inputs=self.make_input(inputs), *args, **kwargs)
 
     @property
     def unembedding_matrix(self) -> torch.Tensor:

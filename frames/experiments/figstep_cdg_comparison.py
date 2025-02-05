@@ -70,13 +70,13 @@ class MultilingualModelGenerator(BaseModel):
 
     def _initialize_model(self, model_config: Dict[str, Any]) -> None:
         """Initialize model with given configuration."""
-        self._current_model = FrameUnembeddingRepresentation.from_model_id(
+        self._manager = FrameUnembeddingRepresentation.from_model_id(
             device_map="auto", torch_dtype=torch.float16, **model_config
         )
 
     def _generate_with_guidance(self, data: List[Any]) -> List[Any]:
         """Generate outputs using guided generation."""
-        return self._current_model.quick_generate_with_topk_guide(
+        return self._manager.quick_generate_with_topk_guide(
             data,
             guide=self.guide,
             min_lemmas_per_synset=self.min_lemmas_per_synset,
@@ -89,9 +89,9 @@ class MultilingualModelGenerator(BaseModel):
     def _generate_without_guidance(self, data: List[Any]) -> List[str]:
         """Generate outputs without guidance."""
         return [
-            self._current_model.model.decode(
-                self._current_model.model.generate(
-                    **input,
+            self._manager.model.decode(
+                self._manager.model.generate(
+                    [inputs],
                     max_new_tokens=self.max_new_tokens,
                     top_k=self.top_k,
                     output_hidden_states=self.output_hidden_states,
@@ -100,7 +100,7 @@ class MultilingualModelGenerator(BaseModel):
                     top_p=self.top_p,
                 )
             )[0]
-            for input in tqdm(data)
+            for inputs in tqdm(data)
         ]
 
     def _get_result_key(
@@ -124,7 +124,7 @@ class MultilingualModelGenerator(BaseModel):
         data: List[Any],
     ) -> None:
         """Process a configuration with and without guidance."""
-        for use_guidance in [True, False]:
+        for use_guidance in [False, True]:
             key = self._get_result_key(
                 model_config["id"], query_type, language, use_guidance
             )
