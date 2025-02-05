@@ -6,7 +6,6 @@ import torch
 
 from ..abstract import BaseModel
 from ..utils.tensor import unsqueeze_like
-
 from .orthogonalization import solve_procrustes
 
 

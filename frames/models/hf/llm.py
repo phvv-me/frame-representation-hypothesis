@@ -2,7 +2,7 @@
 Module for working with HuggingFace models, providing a wrapper class with quantization support.
 """
 
-from typing import Type
+from typing import Literal, Type
 
 import torch
 from transformers import (
@@ -41,22 +41,36 @@ class LanguageHuggingFaceModel(BaseHuggingFaceModel):
     def _fix_pad_token_in_mistral_model(self):
         self._fix_token(self._tokenizer.eos_token, "pad")
 
-    def _build_simple_messages(self, texts):
-        return [[
-            {
-                "role": "user",
-                "content": text,
-            }
-        ] for text in texts]
+    def _build_simple_messages(self, inputs: list[dict[Literal["text"], str]]):
+        return [
+            [
+                {
+                    "role": "user",
+                    "content": data["text"],
+                }
+            ]
+            for data in inputs
+        ]
 
     def make_input(
-        self, inputs: str | torch.IntTensor, *args, **kwargs
+        self,
+        inputs: list[dict[Literal["text"], str]] | torch.IntTensor,
+        *args,
+        **kwargs,
     ) -> torch.Tensor:
-        texts = self._decode_if_tensor(inputs)
-        messages = self._build_simple_messages(texts)
-        return self.tokenizer.apply_chat_template(messages, add_generation_prompt=True, add_special_tokens=True, return_tensors="pt", *args, **kwargs).to(self.device)
+        messages = self._build_simple_messages(self._decode_if_tensor(inputs))
+        return self.tokenizer.apply_chat_template(
+            messages,
+            add_generation_prompt=True,
+            add_special_tokens=True,
+            return_tensors="pt",
+            *args,
+            **kwargs,
+        ).to(self.device)
 
-    def _decode_if_tensor(self, inputs: str | torch.IntTensor) -> str:
+    def _decode_if_tensor(
+        self, inputs: list[dict[Literal["text"], str]] | torch.IntTensor
+    ) -> list[dict[Literal["text"], str]]:
         return (
             self.decode(inputs.flatten(0, 1))
             if isinstance(inputs, torch.Tensor)
@@ -76,7 +90,7 @@ class LanguageHuggingFaceModel(BaseHuggingFaceModel):
 
     def decode(self, input_ids: torch.Tensor) -> list[str]:
         decoded = self._tokenizer.batch_decode(input_ids)
-        return [self._clean(x) for x in decoded]
+        return [{"text": self._clean(x)} for x in decoded]
 
     def embed(self, input_text: str) -> torch.Tensor:
         return self.get_embeddings(self.tokenize(input_text))

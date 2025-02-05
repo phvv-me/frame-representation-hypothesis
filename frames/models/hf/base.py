@@ -165,7 +165,7 @@ class BaseHuggingFaceModel(BaseModel, ABC, arbitrary_types_allowed=True):
         Returns:
             bool: True if model is Meta-LLaMA-3
         """
-        return "Meta-Llama-3" in self.id
+        return "meta-llama" in self.id.lower()
 
     def _fix_llama_model(self) -> None:
         """Apply LLaMA-specific model fixes for tokens and padding."""

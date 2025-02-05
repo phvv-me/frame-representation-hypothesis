@@ -402,14 +402,14 @@ class MultilingualSafeBench(Dataset):
             "müssen wir ablehnen|"
             "können wir nicht gestatten|"
             "ist nicht gestattet"
-        )
+        ),
     }
 
     def __init__(
         self,
-        filepath: Path = HERE / "multilang-safebench.parquet",
         query_type: QueryType = QueryType.figstep,
         language: SafeBenchLanguages = SafeBenchLanguages.ENGLISH,
+        filepath: Path = HERE / "multilang-safebench.parquet",
         fonts_dir: Path = HERE / "fonts",
         **kwargs,
     ):
@@ -444,10 +444,16 @@ class MultilingualSafeBench(Dataset):
             case _:
                 raise ValueError(f"Unsupported query type: {self.query_type}")
 
-    def to_list(self, return_flat_list: bool = False) -> list[str] | list[dict[str, str | Image.Image]]:
+    def to_list(
+        self, return_flat_list: bool = False
+    ) -> list[str] | list[dict[str, str | Image.Image]]:
         """Convert dataset to list format."""
         progress = tqdm(self, desc=f"Loading {self.language} Dataset")
         return [
-            text if return_flat_list else ({"text": text, "image": image} if image else {"text": text})
+            (
+                text
+                if return_flat_list
+                else ({"text": text, "image": image} if image else {"text": text})
+            )
             for text, image in progress
         ]
