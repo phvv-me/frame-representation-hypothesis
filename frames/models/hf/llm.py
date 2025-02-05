@@ -41,17 +41,22 @@ class LanguageHuggingFaceModel(BaseHuggingFaceModel):
     def _fix_pad_token_in_mistral_model(self):
         self._fix_token(self._tokenizer.eos_token, "pad")
 
+    def _build_simple_messages(self, texts):
+        return [[
+            {
+                "role": "user",
+                "content": text,
+            }
+        ] for text in texts]
+
     def make_input(
         self, inputs: str | torch.IntTensor, *args, **kwargs
     ) -> torch.Tensor:
-        return self._tokenizer(
-            text=self._decode_if_tensor(inputs),
-            return_tensors="pt",
-            *args,
-            **kwargs,
-        ).to(self.device)
+        texts = self._decode_if_tensor(inputs)
+        messages = self._build_simple_messages(texts)
+        return self.tokenizer.apply_chat_template(messages, add_generation_prompt=True, add_special_tokens=True, return_tensors="pt", *args, **kwargs).to(self.device)
 
-    def _decode_if_tensor(self, inputs):
+    def _decode_if_tensor(self, inputs: str | torch.IntTensor) -> str:
         return (
             self.decode(inputs.flatten(0, 1))
             if isinstance(inputs, torch.Tensor)

@@ -1,0 +1,1 @@
+from .figstep_cdg_comparison import MultilingualModelGenerator
