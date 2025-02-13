@@ -17,8 +17,8 @@
 # - id: google/gemma-2-27b
 #   family: Gemma 2
 #   quantization: 4
-# - id: google/gemma-2-27b-it
-#   family: Gemma 2
+- id: google/gemma-2-27b-it
+  family: Gemma 2
 # - id: google/gemma-2-9b
 #   family: Gemma 2
 #   quantization: 4
@@ -38,8 +38,8 @@
 # Phi 3:
 # - id: microsoft/Phi-3-medium-4k-instruct
 #   family: Phi 3
-- id: microsoft/Phi-3-medium-128k-instruct
-  family: Phi 3
+# - id: microsoft/Phi-3-medium-128k-instruct
+#   family: Phi 3
 # - id: microsoft/Phi-3-small-8k-instruct
 #   family: Phi 3
 # - id: microsoft/Phi-3-small-128k-instruct

@@ -1,3 +1,4 @@
+from itertools import batched
 import shelve
 from typing import Any, Dict, List, Optional
 
@@ -91,7 +92,7 @@ class MultilingualModelGenerator(BaseModel):
         return [
             self._manager.model.decode(
                 self._manager.model.generate(
-                    [inputs],
+                    inputs,
                     max_new_tokens=self.max_new_tokens,
                     top_k=self.top_k,
                     output_hidden_states=self.output_hidden_states,
@@ -99,8 +100,8 @@ class MultilingualModelGenerator(BaseModel):
                     temperature=self.temperature,
                     top_p=self.top_p,
                 )
-            )[0]
-            for inputs in tqdm(data)
+            )
+            for inputs in batched(tqdm(data), self.batch_size)
         ]
 
     def _get_result_key(
@@ -144,5 +145,5 @@ class MultilingualModelGenerator(BaseModel):
                 self._initialize_model(model_config)
                 for q in self.query_types:
                     for lang in self.languages:
-                        data = MultilingualSafeBench(q, lang).to_list()
+                        data = MultilingualSafeBench(q, lang).to_list(return_flat_list=True)
                         self._process_configuration(model_config, q, lang, data)

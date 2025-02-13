@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Iterator, List, Literal, Union
+from typing import Iterator, List, Union
 
 import numpy as np
 import pandas as pd
@@ -183,7 +183,7 @@ class FrameUnembeddingRepresentation(LinearUnembeddingRepresentation):
     @torch.inference_mode()
     def _generate_with_topk_guide(
         self,
-        input_text: list[dict[Literal['text'], str]],
+        input_text: Union[str, List[str]],
         guide: Concept,
         k: int = 2,
         steps: int = 16,
@@ -206,7 +206,7 @@ class FrameUnembeddingRepresentation(LinearUnembeddingRepresentation):
         # inputs = self.model.make_input(input_text, padding=True)["input_ids"]
 
         inputs = self.model.make_input(input_text, padding=True)
-        tokens = self._generate_candidates(inputs, k)[0].flatten(0, 1)
+        tokens = self._generate_candidates(inputs["input_ids"], k)[0].flatten(0, 1)
 
         for _ in range(steps):
             # notice this approach uses a single pass through the model
@@ -260,7 +260,7 @@ class FrameUnembeddingRepresentation(LinearUnembeddingRepresentation):
     def _generate_candidates(self, tokens: torch.IntTensor, k: int) -> torch.Tensor:
         """Generate candidate texts."""
         inputs = self.model.make_input(self.model.decode(tokens), padding=True)
-        outputs = self.model(input_ids=inputs, output_hidden_states=True, use_cache=False)
+        outputs = self.model(**inputs, output_hidden_states=True, use_cache=False)
         logits, hs = outputs["logits"], outputs["hidden_states"]
 
         generated = logits.softmax(-1)[..., -1, :].topk(k).indices.unsqueeze_(-1)

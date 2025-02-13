@@ -2,7 +2,7 @@
 Module for working with HuggingFace models, providing a wrapper class with quantization support.
 """
 
-from typing import Literal, Type
+from typing import Type
 
 import torch
 from transformers import (
@@ -12,10 +12,6 @@ from transformers import (
 
 from ...utils.stdlib import is_online
 from .base import BaseHuggingFaceModel
-
-from typing import TypeAlias
-
-MessageList: TypeAlias = list[dict[Literal["text"], str]]
 
 
 class LanguageHuggingFaceModel(BaseHuggingFaceModel):
@@ -45,36 +41,17 @@ class LanguageHuggingFaceModel(BaseHuggingFaceModel):
     def _fix_pad_token_in_mistral_model(self):
         self._fix_token(self._tokenizer.eos_token, "pad")
 
-    def _build_simple_messages(self, inputs: MessageList):
-        return [
-            [
-                {
-                    "role": "user",
-                    "content": data["text"],
-                }
-            ]
-            for data in inputs
-        ]
-
     def make_input(
-        self,
-        inputs: MessageList | torch.IntTensor,
-        *args,
-        **kwargs,
+        self, inputs: str | torch.IntTensor, *args, **kwargs
     ) -> torch.Tensor:
-        messages = self._build_simple_messages(self._decode_if_tensor(inputs))
-        return self.tokenizer.apply_chat_template(
-            messages,
-            add_generation_prompt=True,
-            add_special_tokens=True,
+        return self._tokenizer(
+            text=self._decode_if_tensor(inputs),
             return_tensors="pt",
             *args,
             **kwargs,
         ).to(self.device)
 
-    def _decode_if_tensor(
-        self, inputs: MessageList | torch.IntTensor
-    ) -> MessageList:
+    def _decode_if_tensor(self, inputs):
         return (
             self.decode(inputs.flatten(0, 1))
             if isinstance(inputs, torch.Tensor)
@@ -94,13 +71,13 @@ class LanguageHuggingFaceModel(BaseHuggingFaceModel):
 
     def decode(self, input_ids: torch.Tensor) -> list[str]:
         decoded = self._tokenizer.batch_decode(input_ids)
-        return [{"text": self._clean(x)} for x in decoded]
+        return [self._clean(x) for x in decoded]
 
     def embed(self, input_text: str) -> torch.Tensor:
         return self.get_embeddings(self.tokenize(input_text))
     
-    def generate(self, inputs: MessageList, *args, **kwargs):
-        return self.model.generate(inputs=self.make_input(inputs), *args, **kwargs)
+    def generate(self, inputs: list[str], *args, **kwargs):
+        return self.model.generate(*args, **self.make_input(inputs, padding=True), **kwargs)
 
     @property
     def unembedding_matrix(self) -> torch.Tensor:
