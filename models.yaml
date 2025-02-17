@@ -8,7 +8,7 @@
 #   family: Llama 3.1
 # - id: hugging-quants/Meta-Llama-3.1-70B-Instruct-AWQ-INT4
 #   family: Llama 3.1
-- id: meta-llama/Llama-3.1-8B-Instruct
+- id: hugging-quants/Meta-Llama-3.1-8B-Instruct-AWQ-INT4
   family: Llama 3.1
 # - id: meta-llama/Meta-Llama-3.1-8B
 #   family: Llama 3.1
