@@ -4,6 +4,7 @@ This module provides wrapper functions around Seaborn's plotting capabilities wi
 consistent styling and automatic saving of both the plot and the underlying data.
 """
 
+from pathlib import Path
 from typing import Any
 
 import pandas as pd
@@ -25,8 +26,10 @@ def save_plot_and_show(name: str, df: pd.DataFrame) -> None:
         - Plot as PNG file in resources/{name}.png
         - Data as pickle file in resources/{name}.pkl
     """
-    df.to_pickle(f"resources/{name}.pkl")
-    plt.savefig(f"resources/{name}.png", dpi=300, bbox_inches="tight")
+    basepath = Path("resources")
+    basepath.mkdir(exist_ok=True)
+    df.to_pickle(basepath / f"{name}.pkl")
+    plt.savefig(basepath / f"{name}.png", dpi=300, bbox_inches="tight")
     plt.show()
     plt.close()
 
