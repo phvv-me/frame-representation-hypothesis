@@ -44,7 +44,7 @@ class MultilingualModelGenerator(BaseModel):
 
     # Standard generation config
     max_new_tokens: int = Field(
-        default=16, description="Maximum number of tokens to generate"
+        default=42, description="Maximum number of tokens to generate"
     )
     top_k: Optional[int] = Field(
         default=None, description="Number of tokens for top-k filtering"
@@ -66,12 +66,15 @@ class MultilingualModelGenerator(BaseModel):
         default_factory=lambda: [3], description="List of maximum token count values for guidance"
     )
     guidance_k: int = Field(default=2, description="Top-k value for guidance")
-    guidance_steps: int = Field(default=32, description="Number of steps for guidance")
+    guidance_steps: int = Field(default=42, description="Number of steps for guidance")
     batch_size: int = Field(default=32, description="Batch size for processing")
+    use_chat_template: bool = Field(
+        default=False, description="Whether to use chat template for model input"
+    )
 
     def _initialize_model(self, model_config: Dict[str, Any]) -> None:
         """Initialize model with given configuration."""
-        self._manager = FrameUnembeddingRepresentation.from_model_id(device_map="auto", torch_dtype=torch.float16, **model_config)
+        self._manager = FrameUnembeddingRepresentation.from_model_id(device_map="auto", torch_dtype=torch.float16, use_chat_template=self.use_chat_template, **model_config)
 
     def _generate_with_guidance_for_token(self, data: List[Any], token_count: int) -> List[Any]:
         """Generate outputs using guided generation for a specific max_token_count."""
@@ -106,7 +109,7 @@ class MultilingualModelGenerator(BaseModel):
         self, model_id: str, query_type: str, language: str, use_guidance: bool, token_count: int | None = None
     ) -> str:
         """Generate unique key for storing results."""
-        return f"{model_id}_{query_type}_{language}_{'guided' if use_guidance else 'default'}_{token_count or ''}"
+        return f"{model_id}_{query_type}_{language}_{'guided' if use_guidance else 'default'}_{token_count or ''}_{'chat' if self.use_chat_template else ''}"
 
     def _save_results(self, key: str, results: List[Any]) -> None:
         """Save generation results to database."""
