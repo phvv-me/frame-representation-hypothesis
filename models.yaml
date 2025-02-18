@@ -6,8 +6,8 @@
 #   family: Llama 3.1
 # - id: hugging-quants/Meta-Llama-3.1-70B-BNB-NF4-BF16
 #   family: Llama 3.1
-# - id: hugging-quants/Meta-Llama-3.1-70B-Instruct-AWQ-INT4
-#   family: Llama 3.1
+- id: hugging-quants/Meta-Llama-3.1-70B-Instruct-AWQ-INT4
+  family: Llama 3.1
 - id: hugging-quants/Meta-Llama-3.1-8B-Instruct-AWQ-INT4
   family: Llama 3.1
 # - id: meta-llama/Meta-Llama-3.1-8B
@@ -38,16 +38,16 @@
 # Phi 3:
 # - id: microsoft/Phi-3-medium-4k-instruct
 #   family: Phi 3
-# - id: microsoft/Phi-3-medium-128k-instruct
-#   family: Phi 3
+- id: microsoft/Phi-3-medium-128k-instruct
+  family: Phi 3
 # - id: microsoft/Phi-3-small-8k-instruct
 #   family: Phi 3
-# - id: microsoft/Phi-3-small-128k-instruct
-#   family: Phi 3
+- id: microsoft/Phi-3-small-128k-instruct
+  family: Phi 3
 # - id: microsoft/Phi-3-mini-4k-instruct
 #   family: Phi 3
-# - id: microsoft/Phi-3-mini-128k-instruct
-#   family: Phi 3
+- id: microsoft/Phi-3-mini-128k-instruct
+  family: Phi 3
 
 # Qwen 2:
 # - id: Qwen/Qwen2-72B

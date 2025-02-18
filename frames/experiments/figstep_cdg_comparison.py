@@ -28,7 +28,7 @@ class MultilingualModelGenerator(BaseModel):
         temperature: Sampling temperature
         top_p: Top-p sampling parameter
         min_lemmas_per_synset: Minimum lemmas per synset for guidance
-        max_token_count: Maximum token count for guidance
+        max_token_count: List of maximum token count values for guidance
         guidance_k: Top-k value for guidance
         guidance_steps: Number of steps for guidance
         batch_size: Batch size for processing
@@ -60,10 +60,10 @@ class MultilingualModelGenerator(BaseModel):
 
     # Guidance config
     min_lemmas_per_synset: int = Field(
-        default=3, description="Minimum lemmas per synset for guidance"
+        default=1, description="Minimum lemmas per synset for guidance"
     )
-    max_token_count: int = Field(
-        default=3, description="Maximum token count for guidance"
+    max_token_count: List[int] = Field(
+        default_factory=lambda: [3], description="List of maximum token count values for guidance"
     )
     guidance_k: int = Field(default=2, description="Top-k value for guidance")
     guidance_steps: int = Field(default=32, description="Number of steps for guidance")
@@ -71,17 +71,15 @@ class MultilingualModelGenerator(BaseModel):
 
     def _initialize_model(self, model_config: Dict[str, Any]) -> None:
         """Initialize model with given configuration."""
-        self._manager = FrameUnembeddingRepresentation.from_model_id(
-            device_map="auto", torch_dtype=torch.float16, **model_config
-        )
+        self._manager = FrameUnembeddingRepresentation.from_model_id(device_map="auto", torch_dtype=torch.float16, **model_config)
 
-    def _generate_with_guidance(self, data: List[Any]) -> List[Any]:
-        """Generate outputs using guided generation."""
+    def _generate_with_guidance_for_token(self, data: List[Any], token_count: int) -> List[Any]:
+        """Generate outputs using guided generation for a specific max_token_count."""
         return self._manager.quick_generate_with_topk_guide(
             data,
             guide=self.guide,
             min_lemmas_per_synset=self.min_lemmas_per_synset,
-            max_token_count=self.max_token_count,
+            max_token_count=token_count,
             k=self.guidance_k,
             steps=self.guidance_steps,
             batch_size=self.batch_size,
@@ -89,8 +87,9 @@ class MultilingualModelGenerator(BaseModel):
 
     def _generate_without_guidance(self, data: List[Any]) -> List[str]:
         """Generate outputs without guidance."""
-        return [
-            self._manager.model.decode(
+        return [out
+            for inputs in batched(tqdm(data), self.batch_size)
+            for out in self._manager.model.decode(
                 self._manager.model.generate(
                     inputs,
                     max_new_tokens=self.max_new_tokens,
@@ -101,14 +100,13 @@ class MultilingualModelGenerator(BaseModel):
                     top_p=self.top_p,
                 )
             )
-            for inputs in batched(tqdm(data), self.batch_size)
         ]
 
     def _get_result_key(
-        self, model_id: str, query_type: str, language: str, use_guidance: bool
+        self, model_id: str, query_type: str, language: str, use_guidance: bool, token_count: int | None = None
     ) -> str:
         """Generate unique key for storing results."""
-        return f"{model_id}_{query_type}_{language}_{'guided' if use_guidance else 'default'}"
+        return f"{model_id}_{query_type}_{language}_{'guided' if use_guidance else 'default'}_{token_count or ''}"
 
     def _save_results(self, key: str, results: List[Any]) -> None:
         """Save generation results to database."""
@@ -126,17 +124,21 @@ class MultilingualModelGenerator(BaseModel):
     ) -> None:
         """Process a configuration with and without guidance."""
         for use_guidance in [False, True]:
-            key = self._get_result_key(
-                model_config["id"], query_type, language, use_guidance
-            )
-
-            results = (
-                self._generate_with_guidance(data)
-                if use_guidance
-                else self._generate_without_guidance(data)
-            )
-
-            self._save_results(key, results)
+            if not use_guidance:
+                key = self._get_result_key(model_config["id"], query_type, language, use_guidance)
+                with shelve.open(self.db_path) as db:
+                    if key in db:
+                        continue
+                results = self._generate_without_guidance(data)
+                self._save_results(key, results)
+            else:
+                for token_count in self.max_token_count:
+                    key = self._get_result_key(model_config["id"], query_type, language, use_guidance, token_count)
+                    with shelve.open(self.db_path) as db:
+                        if key in db:
+                            continue
+                    results = self._generate_with_guidance_for_token(data, token_count)
+                    self._save_results(key, results)
 
     def generate_all(self) -> None:
         """Generate results for all configured combinations."""
