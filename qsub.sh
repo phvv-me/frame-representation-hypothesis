@@ -13,5 +13,8 @@ module load cuda/12.3.2
 module load openmpi/$NQSV_MPI_VER
 
 cd $PBS_O_WORKDIR
+
 uv run python -c "import torch; print(torch.__version__)"
 make run
+
+exit 0
