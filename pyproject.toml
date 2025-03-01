@@ -11,6 +11,7 @@ dependencies = [
     "cudf-cu12>=24.8.2",
     "datasets>=3.0.0",
     "einops>=0.8.1",
+    "flash-attn>=2.7.4.post1",
     "huggingface-hub[all,cli,hf-transfer]>=0.24.7",
     "humanize>=4.10.0",
     "ipykernel>=6.29.5",

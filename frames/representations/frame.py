@@ -284,7 +284,7 @@ class FrameUnembeddingRepresentation(LinearUnembeddingRepresentation):
 
     def _is_generation_complete(self, gen_text: torch.Tensor) -> bool:
         """Check if the generation is complete."""
-        return gen_text.eq(self.model._tokenizer.eos_token_id).any(-1).all()
+        return gen_text.eq(self.model.tokenizer.eos_token_id).any(-1).all()
 
     def loss(self, input_text: Union[str, List[str]]) -> torch.Tensor:
         """

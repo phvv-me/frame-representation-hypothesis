@@ -783,6 +783,16 @@ wheels = [
 ]
 
 [[package]]
+name = "flash-attn"
+version = "2.7.4.post1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "einops" },
+    { name = "torch" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/11/34/9bf60e736ed7bbe15055ac2dab48ec67d9dbd088d2b4ae318fd77190ab4e/flash_attn-2.7.4.post1.tar.gz", hash = "sha256:f03485c9a49a4d68d0733acdcad80ab0e72afa025a777fdc2966ceccf9d51765", size = 5986610 }
+
+[[package]]
 name = "fonttools"
 version = "4.55.8"
 source = { registry = "https://pypi.org/simple" }
@@ -826,6 +836,7 @@ dependencies = [
     { name = "cudf-cu12" },
     { name = "datasets" },
     { name = "einops" },
+    { name = "flash-attn" },
     { name = "huggingface-hub", extra = ["all", "cli", "hf-transfer"] },
     { name = "humanize" },
     { name = "ipykernel" },
@@ -859,6 +870,7 @@ requires-dist = [
     { name = "cudf-cu12", specifier = ">=24.8.2" },
     { name = "datasets", specifier = ">=3.0.0" },
     { name = "einops", specifier = ">=0.8.1" },
+    { name = "flash-attn", specifier = ">=2.7.4.post1" },
     { name = "huggingface-hub", extras = ["all", "cli", "hf-transfer"], specifier = ">=0.24.7" },
     { name = "humanize", specifier = ">=4.10.0" },
     { name = "ipykernel", specifier = ">=6.29.5" },
