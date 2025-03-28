@@ -25,6 +25,10 @@ class FrameUnembeddingRepresentation(LinearUnembeddingRepresentation):
 
     data: MultiLingualWordNetSynsets = MultiLingualWordNetSynsets()
 
+    def build_concept_frame(self, tokens: list[int] | pd.Series, *args, **kwargs) -> torch.Tensor:
+        tokens = self._make_word_frames(tokens)
+        return self.average_frames(tokens, *args, **kwargs)
+
     def average_frames(self, word_frames: torch.Tensor, dim: int = -3) -> torch.Tensor:
         """
         Average frames across a specified dimension.
