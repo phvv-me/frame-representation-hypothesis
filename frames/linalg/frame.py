@@ -55,7 +55,9 @@ class Frame(BaseModel, arbitrary_types_allowed=True):
                          closest to the frames' subtraction
         """
         return self._subtract_frames(self.tensor, other.tensor)
-
+    def __str__(self) -> str:
+        """String representation of the Frame."""
+        return f"Frame(shape={self.tensor.shape})"
     @cached_property
     def rank(self) -> torch.Tensor:
         """Compute the rank of the concept's frame.
@@ -79,7 +81,7 @@ class Frame(BaseModel, arbitrary_types_allowed=True):
         Note:
             This is an upper bound for torch.linalg.matrix_rank which is slow
         """
-        return tensor.ne(0).any(dim=-2).sum(-1)
+        return tensor.ne(0).any(-2).sum(-1)
 
     @classmethod
     def _geometric_mean_rank(

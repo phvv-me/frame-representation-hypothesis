@@ -14,6 +14,9 @@ from matplotlib import pyplot as plt
 sns.set_style("whitegrid")
 sns.set_context("paper", font_scale=1.5)
 
+BASEPATH = Path("resources")
+BASEPATH.mkdir(exist_ok=True)
+
 
 def save_plot_and_show(name: str, df: pd.DataFrame) -> None:
     """Save both the plot and the underlying data, then display the plot.
@@ -26,10 +29,7 @@ def save_plot_and_show(name: str, df: pd.DataFrame) -> None:
         - Plot as PNG file in resources/{name}.png
         - Data as pickle file in resources/{name}.pkl
     """
-    basepath = Path("resources")
-    basepath.mkdir(exist_ok=True)
-    df.to_pickle(basepath / f"{name}.pkl")
-    plt.savefig(basepath / f"{name}.png", dpi=300, bbox_inches="tight")
+    plt.savefig(BASEPATH / f"{name}.png", dpi=300, bbox_inches="tight")
     plt.show()
     plt.close()
 
@@ -47,6 +47,7 @@ def histplot_and_save(
         *args: Additional positional arguments passed to sns.histplot
         **kwargs: Additional keyword arguments passed to sns.histplot
     """
+    df.to_pickle(BASEPATH / f"{name}.pkl")
     sns.histplot(
         df, x=x, hue=hue, palette="colorblind", multiple="stack", *args, **kwargs
     )
@@ -67,6 +68,7 @@ def lineplot_and_save(
         *args: Additional positional arguments passed to sns.lineplot
         **kwargs: Additional keyword arguments passed to sns.lineplot
     """
+    df.to_pickle(BASEPATH / f"{name}.pkl")
     sns.lineplot(
         df,
         x=x,

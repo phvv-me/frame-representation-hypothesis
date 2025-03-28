@@ -14,7 +14,7 @@ run_notebook:
 	OUTPUT_DIR="$$N_PATH/outputs"; \
 	mkdir -p "$$OUTPUT_DIR"; \
 	echo "Running notebook: $(N)"; \
-	papermill \
+	uv run papermill \
 		$(N) \
 		"$$OUTPUT_DIR/$$N_NAME" \
 		--log-output \

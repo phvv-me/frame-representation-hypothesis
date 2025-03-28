@@ -129,7 +129,7 @@ class FrameUnembeddingRepresentation(LinearUnembeddingRepresentation):
     def get_all_words_frames(self, *args, **kwargs) -> Frame:
         synsets = self.data.get_all_synsets(self.model.tokenizer, *args, **kwargs)
         return Frame(
-            tensor=self._make_word_frames(synsets["tokens"]).mT.transpose_(0, 1)
+            tensor=self._make_word_frames(synsets["tokens"]).mT.transpose(0, 1)
         )
 
     def compute_concept(self, synsets: pd.DataFrame) -> Concept:
