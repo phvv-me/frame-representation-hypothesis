@@ -77,6 +77,6 @@ If our work is useful for you, please cite as:
 }
 ```
 
-## Star History
+<!-- ## Star History -->
 
 <!-- [![Star History Chart](https://api.star-history.com/svg?repos=Pedrexus/frame-representation-hypothesis&type=Date)](https://star-history.com/#Pedrexus/frame-representation-hypothesis&Date) -->
