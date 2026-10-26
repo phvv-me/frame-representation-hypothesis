@@ -55,9 +55,7 @@ class TextRenderer(BaseModel, arbitrary_types_allowed=True):
         return ImageFont.truetype(str(self.font_path), self.font_size)
 
     @staticmethod
-    def calculate_dimension(
-        content_size: int, margin: int, padding: int, min_size: int
-    ) -> int:
+    def calculate_dimension(content_size: int, margin: int, padding: int, min_size: int) -> int:
         """Calculate dimension with margins and padding."""
         return max(content_size + 2 * (padding + margin), min_size)
 
@@ -87,12 +85,8 @@ class TextRenderer(BaseModel, arbitrary_types_allowed=True):
     ) -> tuple[int, int]:
         """Calculate final image dimensions based on text bounds."""
         left, top, right, bottom = bounds
-        width = self.calculate_dimension(
-            right - left, self.margin_x, padding, self.image_width
-        )
-        height = self.calculate_dimension(
-            bottom - top, self.margin_y, padding, self.image_height
-        )
+        width = self.calculate_dimension(right - left, self.margin_x, padding, self.image_width)
+        height = self.calculate_dimension(bottom - top, self.margin_y, padding, self.image_height)
         return width, height
 
     def create_image(self, text: str) -> Image.Image:

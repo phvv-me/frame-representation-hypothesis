@@ -48,9 +48,7 @@ def histplot_and_save(
         **kwargs: Additional keyword arguments passed to sns.histplot
     """
     df.to_pickle(BASEPATH / f"{name}.pkl")
-    sns.histplot(
-        df, x=x, hue=hue, palette="colorblind", multiple="stack", *args, **kwargs
-    )
+    sns.histplot(df, x=x, hue=hue, palette="colorblind", multiple="stack", *args, **kwargs)
     save_plot_and_show(name, df)
 
 

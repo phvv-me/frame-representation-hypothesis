@@ -31,9 +31,9 @@ def load_multilingual_question_dataset(
     df_xquad_de = load_dataset("google/xquad", "xquad.de")["validation"].to_pandas()
     df_xquad_th = load_dataset("google/xquad", "xquad.th")["validation"].to_pandas()
     df_squad_it = load_dataset("crux82/squad_it")["train"].to_pandas()
-    df_mlqa_hi = load_dataset(
-        "facebook/mlqa", "mlqa-translate-train.hi", trust_remote_code=True
-    )["train"].to_pandas()
+    df_mlqa_hi = load_dataset("facebook/mlqa", "mlqa-translate-train.hi", trust_remote_code=True)[
+        "train"
+    ].to_pandas()
 
     # 2. Standardizes column names and adds language labels
     df_aya = df_aya[["inputs", "language"]].rename(columns={"inputs": "question"})

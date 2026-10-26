@@ -1,9 +1,7 @@
 import torch
 
 
-def gram_schmidt(
-    vectors: torch.Tensor, dim: int = -1, eps: float = 1e-3, *args, **kwargs
-):
+def gram_schmidt(vectors: torch.Tensor, dim: int = -1, eps: float = 1e-3, *args, **kwargs):
     """
     Gram-Schmidt orthogonalization process for a tensor of arbitrary shape.
 

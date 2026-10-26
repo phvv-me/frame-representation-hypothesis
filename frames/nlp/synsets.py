@@ -214,9 +214,7 @@ class MultiLingualWordNetSynsets(BaseModel):
         )
         return df
 
-    def get_dataframe_filename(
-        self, tokenizer: transformers.PreTrainedTokenizer
-    ) -> Path:
+    def get_dataframe_filename(self, tokenizer: transformers.PreTrainedTokenizer) -> Path:
         """
         Generate a filename for caching the tokenized WordNet DataFrame.
 
@@ -226,7 +224,9 @@ class MultiLingualWordNetSynsets(BaseModel):
         Returns:
             str: The generated filename for caching.
         """
-        filename = f".cache/wordnet/wordnet_{tokenizer.__class__.__name__.lower()}_{hash(self)}.parquet"
+        filename = (
+            f".cache/wordnet/wordnet_{tokenizer.__class__.__name__.lower()}_{hash(self)}.parquet"
+        )
         filepath = Path.home() / filename
         filepath.parent.mkdir(parents=True, exist_ok=True)
         return filepath
@@ -294,15 +294,11 @@ class MultiLingualWordNetSynsets(BaseModel):
             cudf.DataFrame: The filtered and processed DataFrame.
         """
         df["token count"] = (
-            df["tokens"]
-            .list.index(tokenizer.pad_token_id)
-            .replace(-1, self.max_length - 1)
+            df["tokens"].list.index(tokenizer.pad_token_id).replace(-1, self.max_length - 1)
         )
         return df.dropna().drop_duplicates(subset=["synset", "lemma"])
 
-    def _filter_by_token_count(
-        self, df: cudf.DataFrame, max_token_count: int
-    ) -> cudf.DataFrame:
+    def _filter_by_token_count(self, df: cudf.DataFrame, max_token_count: int) -> cudf.DataFrame:
         """
         Apply the single-token filter to the DataFrame.
 

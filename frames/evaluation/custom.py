@@ -20,9 +20,7 @@ class CustomLlama3_8B(DeepEvalBaseLLM):
             device_map="auto",
             quantization_config=quantization_config,
         )
-        tokenizer = AutoTokenizer.from_pretrained(
-            "meta-llama/Meta-Llama-3-8B-Instruct"
-        )
+        tokenizer = AutoTokenizer.from_pretrained("meta-llama/Meta-Llama-3-8B-Instruct")
 
         self.model = model_4bit
         self.tokenizer = tokenizer

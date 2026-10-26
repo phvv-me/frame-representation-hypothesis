@@ -43,19 +43,13 @@ class MultilingualModelGenerator(BaseModel):
     guide: Any
 
     # Standard generation config
-    max_new_tokens: int = Field(
-        default=42, description="Maximum number of tokens to generate"
-    )
-    top_k: Optional[int] = Field(
-        default=None, description="Number of tokens for top-k filtering"
-    )
+    max_new_tokens: int = Field(default=42, description="Maximum number of tokens to generate")
+    top_k: Optional[int] = Field(default=None, description="Number of tokens for top-k filtering")
     output_hidden_states: bool = Field(
         default=False, description="Whether to output hidden states"
     )
     do_sample: bool = Field(default=False, description="Whether to use sampling")
-    temperature: Optional[float] = Field(
-        default=None, description="Sampling temperature"
-    )
+    temperature: Optional[float] = Field(default=None, description="Sampling temperature")
     top_p: Optional[float] = Field(default=None, description="Top-p sampling parameter")
 
     # Guidance config
@@ -74,7 +68,12 @@ class MultilingualModelGenerator(BaseModel):
 
     def _initialize_model(self, model_config: Dict[str, Any]) -> None:
         """Initialize model with given configuration."""
-        self._manager = FrameUnembeddingRepresentation.from_model_id(device_map="auto", torch_dtype=torch.float16, use_chat_template=self.use_chat_template, **model_config)
+        self._manager = FrameUnembeddingRepresentation.from_model_id(
+            device_map="auto",
+            torch_dtype=torch.float16,
+            use_chat_template=self.use_chat_template,
+            **model_config,
+        )
 
     def _generate_with_guidance_for_token(self, data: List[Any], token_count: int) -> List[Any]:
         """Generate outputs using guided generation for a specific max_token_count."""
@@ -90,7 +89,8 @@ class MultilingualModelGenerator(BaseModel):
 
     def _generate_without_guidance(self, data: List[Any]) -> List[str]:
         """Generate outputs without guidance."""
-        return [out
+        return [
+            out
             for inputs in batched(tqdm(data), self.batch_size)
             for out in self._manager.model.decode(
                 self._manager.model.generate(
@@ -106,7 +106,12 @@ class MultilingualModelGenerator(BaseModel):
         ]
 
     def _get_result_key(
-        self, model_id: str, query_type: str, language: str, use_guidance: bool, token_count: int | None = None
+        self,
+        model_id: str,
+        query_type: str,
+        language: str,
+        use_guidance: bool,
+        token_count: int | None = None,
     ) -> str:
         """Generate unique key for storing results."""
         return f"{model_id}_{query_type}_{language}_{'guided' if use_guidance else 'default'}_{token_count or ''}_{'chat' if self.use_chat_template else ''}"
@@ -136,7 +141,9 @@ class MultilingualModelGenerator(BaseModel):
                 self._save_results(key, results)
             else:
                 for token_count in self.max_token_count:
-                    key = self._get_result_key(model_config["id"], query_type, language, use_guidance, token_count)
+                    key = self._get_result_key(
+                        model_config["id"], query_type, language, use_guidance, token_count
+                    )
                     with shelve.open(self.db_path) as db:
                         if key in db:
                             continue

@@ -55,9 +55,11 @@ class Frame(BaseModel, arbitrary_types_allowed=True):
                          closest to the frames' subtraction
         """
         return self._subtract_frames(self.tensor, other.tensor)
+
     def __str__(self) -> str:
         """String representation of the Frame."""
         return f"Frame(shape={self.tensor.shape})"
+
     @cached_property
     def rank(self) -> torch.Tensor:
         """Compute the rank of the concept's frame.
@@ -112,18 +114,14 @@ class Frame(BaseModel, arbitrary_types_allowed=True):
         return traces / cls._geometric_mean_rank(frames1, frames2)
 
     @classmethod
-    def _correlation_diagonal(
-        cls, frames1: torch.Tensor, frames2: torch.Tensor
-    ) -> torch.Tensor:
+    def _correlation_diagonal(cls, frames1: torch.Tensor, frames2: torch.Tensor) -> torch.Tensor:
         """Compute the correlation between two sets of frames in respective order.
 
         Useful for speeding up the computation only
         the correlation matrix main diagonal is required.
         """
         traces = torch.einsum("...ndk,...ndk->...n", frames1, frames2)
-        return traces / cls._geometric_mean_rank(
-            frames1, frames2, full_comparison=False
-        )
+        return traces / cls._geometric_mean_rank(frames1, frames2, full_comparison=False)
 
     def similarity(self, other: Frame | torch.Tensor) -> torch.Tensor:
         # computes similarity (inner product) between list of frames in order

@@ -42,12 +42,14 @@ class LanguageHuggingFaceModel(BaseHuggingFaceModel):
     def _fix_pad_token_in_mistral_model(self):
         self._fix_token(self.tokenizer.eos_token, "pad")
 
-    def make_input(
-        self, inputs: str | torch.IntTensor, *args, **kwargs
-    ) -> torch.Tensor:
+    def make_input(self, inputs: str | torch.IntTensor, *args, **kwargs) -> torch.Tensor:
         if self.use_chat_template:
-            messages = [[{"role": "user", "content": text}] for text in self._decode_if_tensor(inputs)]
-            return self.tokenizer.apply_chat_template(messages, return_tensors="pt", return_dict=True, *args, **kwargs).to(self.device)
+            messages = [
+                [{"role": "user", "content": text}] for text in self._decode_if_tensor(inputs)
+            ]
+            return self.tokenizer.apply_chat_template(
+                messages, return_tensors="pt", return_dict=True, *args, **kwargs
+            ).to(self.device)
         else:
             return self.tokenizer(
                 text=self._decode_if_tensor(inputs),
@@ -55,13 +57,9 @@ class LanguageHuggingFaceModel(BaseHuggingFaceModel):
                 *args,
                 **kwargs,
             ).to(self.device)
-        
+
     def _decode_if_tensor(self, inputs):
-        return (
-            self.decode(inputs.flatten(0, 1))
-            if isinstance(inputs, torch.Tensor)
-            else inputs
-        )
+        return self.decode(inputs.flatten(0, 1)) if isinstance(inputs, torch.Tensor) else inputs
 
     def _clean(self, text: str) -> str:
         """Clean the input text."""
@@ -80,7 +78,7 @@ class LanguageHuggingFaceModel(BaseHuggingFaceModel):
 
     def embed(self, input_text: str) -> torch.Tensor:
         return self.get_embeddings(self.tokenize(input_text))
-    
+
     def generate(self, inputs: list[str], *args, **kwargs):
         return self.model.generate(*args, **self.make_input(inputs, padding=True), **kwargs)
 
